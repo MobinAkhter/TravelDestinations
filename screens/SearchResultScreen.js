@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import MIcon from "../components/ui/MIcon";
-import { removeSpace, iconMapper } from "../utils";
 import { db } from "../firebase";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import SearchBar from "../components/ui/SearchBar";
@@ -130,7 +129,7 @@ function SearchResultScreen({ route }) {
                 source={
                   item.image && item.image[0]
                     ? { uri: item.image[0] }
-                    : require("../assets/leaf_icon.jpeg")
+                    : require("../assets/icon.png")
                 }
                 style={styles.herbImage}
               />

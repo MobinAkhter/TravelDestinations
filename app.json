@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Herb Mate",
-    "slug": "HerbalLife",
+    "name": "Muslim Travel Destinations",
+    "slug": "MuslimTravelDestinations", 
     "plugins": [
   [
     "expo-build-properties",
@@ -18,7 +18,7 @@
 ],
     "version": "1.0.29",
     "orientation": "default",
-    "icon": "./logo.png",
+    "icon": "./logo-1.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -37,10 +37,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./transparentlogo.png",
+        "foregroundImage": "./logo-1.png",
         "backgroundColor": "#35D96F"
       },
-      "package": "com.mobinakhter123.HerbalLife",
+      "package": "com.mobinakhter123.MuslimTravelDestinations",
       "versionCode": 29
     },
     "web": {

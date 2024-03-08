@@ -24,7 +24,7 @@ const SplashScreen = ({ navigation }) => {
     ]).start();
 
     const timer = setTimeout(() => {
-      navigation.replace("Signup");
+      navigation.replace("Welcome");
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -45,10 +45,10 @@ const SplashScreen = ({ navigation }) => {
           ]}
         />
         <Animated.Text style={[styles.title, { opacity: fadeAnim }]}>
-          Welcome to Herb Mate
+          Welcome to Muslim Travel Experiences
         </Animated.Text>
         <Animated.Text style={[styles.subtitle, { opacity: fadeAnim }]}>
-          Discover the world of herbs
+          Discover the making of the Muslim world
         </Animated.Text>
       </LinearGradient>
     </View>

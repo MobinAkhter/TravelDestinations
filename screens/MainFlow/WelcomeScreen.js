@@ -8,13 +8,10 @@ import {
   TouchableOpacity,
   Dimensions,
   KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db, firestore } from "../../firebase";
-import { Entypo } from "@expo/vector-icons";
-import { removeSpace, iconMapper } from "../../utils";
 import MIcon from "../../components/ui/MIcon";
 import SearchBar from "../../components/ui/SearchBar";
 
@@ -76,7 +73,6 @@ const WelcomeScreen = ({}) => {
       style={styles.card}
     >
       <View style={styles.cardContent}>
-        <MIcon {...iconMapper[removeSpace(item.name)]} size={30} />
         <Text style={styles.cardText}>{item.name}</Text>
       </View>
     </TouchableOpacity>

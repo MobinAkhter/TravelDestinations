@@ -21,14 +21,11 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import Collapsible from "react-native-collapsible";
 import { AntDesign } from "@expo/vector-icons";
 import { db, auth } from "../../firebase";
-import BookMarkButton from "../../components/ui/BookmarkButton";
 import FloatingScrollButton from "../../components/ui/FloatingScrollButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Swiper from "react-native-swiper";
-import RNPickerSelect from "react-native-picker-select";
 import * as Speech from "expo-speech"; // This is better cause the other lib wanted me to link it or something. Extra steps for expo managed workflow.
 import Icon from "react-native-vector-icons/FontAwesome";
-import { FieldValue } from "firebase/firestore";
 import {
   getFirestore,
   doc,
@@ -630,7 +627,7 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
                   source={
                     imageUri
                       ? { uri: imageUri }
-                      : require("../../assets/leaf_icon.jpeg")
+                      : require("../../assets/icon.png")
                   }
                   style={styles.image}
                   resizeMode="cover"
@@ -744,12 +741,6 @@ function AboutRemedyScreen({ remedy, navigation, remediesList }) {
                 <View style={styles.divider} />
               </>
             )}
-          </View>
-
-          <View style={{ alignItems: "center" }}>
-            <BookMarkButton onPress={bookMarkRemedy}>
-              {bookMarkText}
-            </BookMarkButton>
           </View>
         </View>
         <View style={styles.emptyContainer}></View>
