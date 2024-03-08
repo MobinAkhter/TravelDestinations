@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1023645176130",
+    "project_id": "fir-auth-b5f8a",
+    "storage_bucket": "fir-auth-b5f8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023645176130:android:6325b7350180fa070e78db",
+        "android_client_info": {
+          "package_name": "com.mobinakhter123.HerbalLife"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1023645176130-0u6nlqnbljdm1vqqr3p2bq087odaocsk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1O_Db_iQiPVtIamqhL5cFAacDCzNBFEQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1023645176130-0u6nlqnbljdm1vqqr3p2bq087odaocsk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
