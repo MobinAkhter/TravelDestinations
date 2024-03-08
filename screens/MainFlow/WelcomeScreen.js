@@ -11,65 +11,53 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { db, firestore } from "../../firebase";
+import { db } from "../../firebase";
 import MIcon from "../../components/ui/MIcon";
 import SearchBar from "../../components/ui/SearchBar";
 
 import { getFirestore, collection, getDocs } from "firebase/firestore";
-const WelcomeScreen = ({}) => {
+
+const WelcomeScreen = () => {
   const navigation = useNavigation();
-  const [bodyParts, setBodyParts] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  // const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    // AsyncStorage.clear();
-    const fetchBodyParts = async () => {
+    const fetchCountries = async () => {
       try {
-        // Try to get the cached body parts from AsyncStorage
-        const cachedBodyParts = await AsyncStorage.getItem("bodyParts");
+        const cachedCountries = await AsyncStorage.getItem("countries");
+        const countriesCollectionRef = collection(db, "Countries");
+        const querySnapshot = await getDocs(countriesCollectionRef);
+        const loadedCountries = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          key: doc.id,
+        }));
 
-        // If cached data exists, parse it and set it as the state
-        if (cachedBodyParts) {
-          const parsedBodyParts = JSON.parse(cachedBodyParts);
-          console.log("Fetching body parts from cache...");
-          await setBodyParts(parsedBodyParts); // add await here
+        // Compare loadedCountries with cachedCountries to decide if update is needed
+        if (
+          !cachedCountries ||
+          JSON.stringify(loadedCountries) !== cachedCountries
+        ) {
+          console.log("Updating countries from Firestore");
+          setCountries(loadedCountries);
+          await AsyncStorage.setItem(
+            "countries",
+            JSON.stringify(loadedCountries)
+          );
+        } else {
+          console.log("Loading countries from cache");
+          setCountries(JSON.parse(cachedCountries));
         }
-
-        // Always fetch the latest data from Firestore and update the state and cache
-        const parts = [];
-        const querySnapshot = await getDocs(collection(db, "BodyParts"));
-        querySnapshot.forEach((doc) => {
-          console.log(`${doc.id}`);
-        });
-
-        // // console.log("Fetching body parts from Firestore...");
-        querySnapshot.forEach((doc) => {
-          parts.push({
-            ...doc.data(),
-            key: doc.id,
-          });
-        });
-
-        console.log(parts);
-
-        // Update state with the latest body parts
-        setBodyParts(parts);
-
-        // Cache the latest body parts
-        await AsyncStorage.setItem("bodyParts", JSON.stringify(parts));
-        console.log("Caching");
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching countries:", error);
       }
     };
-
-    fetchBodyParts();
+    fetchCountries();
   }, []);
 
-  const renderBodyPartCard = ({ item }) => (
+  const renderCountryCard = ({ item }) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate("Condition List", { bp: item.name })}
+      onPress={() => navigation.navigate("CityScreen", { country: item.name })}
       style={styles.card}
     >
       <View style={styles.cardContent}>
@@ -79,7 +67,6 @@ const WelcomeScreen = ({}) => {
   );
 
   const navigateToSearchResult = () => {
-    console.log("nav to search results???");
     navigation.navigate("Search Result", {
       searchVal: searchInput,
     });
@@ -94,15 +81,14 @@ const WelcomeScreen = ({}) => {
           placeholder="Search for remedy/conditions"
           onSearchPress={navigateToSearchResult}
         />
-        <View style={styles.bodyPartsContainer}>
+        <View style={styles.countriesContainer}>
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={bodyParts}
-            renderItem={renderBodyPartCard}
+            data={countries}
+            renderItem={renderCountryCard}
             keyExtractor={(item) => item.key}
             numColumns={2}
             columnWrapperStyle={styles.row}
-            // ListFooterComponent={renderFooter}
           />
         </View>
       </SafeAreaView>
@@ -124,7 +110,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginBottom: 10,
   },
-  bodyPartsContainer: {
+  countriesContainer: {
     marginTop: 5,
     flex: 1,
   },

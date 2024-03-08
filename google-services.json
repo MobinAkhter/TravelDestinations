@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "1023645176130",
-    "project_id": "fir-auth-b5f8a",
-    "storage_bucket": "fir-auth-b5f8a.appspot.com"
+    "project_number": "1086510129841",
+    "project_id": "muslimtravel-c58ed",
+    "storage_bucket": "muslimtravel-c58ed.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1023645176130:android:6325b7350180fa070e78db",
+        "mobilesdk_app_id": "1:1086510129841:android:986a0895411aa4f47cb890",
         "android_client_info": {
-          "package_name": "com.mobinakhter123.HerbalLife"
+          "package_name": "com.mobinakhter123.MuslimTravel"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "1023645176130-0u6nlqnbljdm1vqqr3p2bq087odaocsk.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB1O_Db_iQiPVtIamqhL5cFAacDCzNBFEQ"
+          "current_key": "AIzaSyCGXu_k6MSDHTiUaEpHhGwM3RHa6gYmjyU"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1023645176130-0u6nlqnbljdm1vqqr3p2bq087odaocsk.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
