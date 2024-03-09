@@ -82,6 +82,9 @@ const CityScreen = ({ route }) => {
   const renderCityCard = ({ item }) => {
     const backgroundColor = countryThemeColors[country] || "#DDD"; // Default color if country is not in the mapping
     const textColor = getComplementaryTextColor(backgroundColor);
+    console.log("COUNTRY", country);
+    console.log("CITY", item.name);
+
     return (
       <TouchableOpacity
         onPress={() =>

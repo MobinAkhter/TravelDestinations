@@ -38,7 +38,7 @@ function AuthenticatedStack() {
         component={DestinationScreen}
       />
       <Stack.Screen
-        name="DetailedDestinationScreen"
+        name="About Location"
         component={DetailedDestinationScreen}
       />
       <Stack.Screen name="Search Result" component={SearchResultScreen} />
