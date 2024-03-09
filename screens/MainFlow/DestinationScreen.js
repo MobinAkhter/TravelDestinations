@@ -6,10 +6,12 @@ import {
   FlatList,
   Image,
   StyleSheet,
+  StatusBar,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../../firebase";
-
+import { countryThemeColors } from "../../constants/themeColors";
 import { collection, getDocs } from "firebase/firestore";
 
 function DestinationScreen({ route }) {
@@ -43,6 +45,21 @@ function DestinationScreen({ route }) {
     fetchDestinations();
   }, [country, city]);
 
+  useEffect(() => {
+    const themeColor = countryThemeColors[country] || "#FFFFFF"; // Default to white if no color is found
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: themeColor,
+      },
+      headerTintColor: "#fff", // Adjust the back button and title color if needed
+    });
+
+    // If you're also changing the StatusBar color, set that here
+    if (Platform.OS === "android") {
+      StatusBar.setBackgroundColor(themeColor);
+      StatusBar.setBarStyle("light-content"); // or 'dark-content'
+    }
+  }, [country]);
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => {

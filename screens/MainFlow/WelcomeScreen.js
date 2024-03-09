@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -8,6 +9,9 @@ import {
   TouchableOpacity,
   Dimensions,
   KeyboardAvoidingView,
+  Image,
+  StatusBar,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,6 +25,25 @@ const WelcomeScreen = () => {
   const navigation = useNavigation();
   const [countries, setCountries] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+
+  useFocusEffect(
+    React.useCallback(() => {
+      navigation.setOptions({
+        headerStyle: {
+          backgroundColor: "#35D96F", // Your default Welcome screen header color
+        },
+      });
+
+      // If you're also changing the StatusBar color, reset that as well
+      if (Platform.OS === "android") {
+        StatusBar.setBackgroundColor("#35D96F");
+      }
+
+      return () => {
+        // You can define any cleanup logic here if needed when the screen is unfocused
+      };
+    }, [navigation])
+  );
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -61,6 +84,7 @@ const WelcomeScreen = () => {
       style={styles.card}
     >
       <View style={styles.cardContent}>
+        <Image source={{ uri: item.imageUrl }} style={styles.cardImage} />
         <Text style={styles.cardText}>{item.name}</Text>
       </View>
     </TouchableOpacity>
@@ -78,7 +102,7 @@ const WelcomeScreen = () => {
         <SearchBar
           searchValue={searchInput}
           setSearchValue={setSearchInput}
-          placeholder="Search for remedy/conditions"
+          placeholder="Search for cities/location"
           onSearchPress={navigateToSearchResult}
         />
         <View style={styles.countriesContainer}>
@@ -134,28 +158,43 @@ const styles = StyleSheet.create({
 
   card: {
     margin: 10,
-    borderRadius: 10,
-    backgroundColor: "#FFFFFF",
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    borderRadius: 8,
+    backgroundColor: "#f0f0f0", // A light grey background for contrast
+    shadowOpacity: 0.08,
+    shadowRadius: 3,
     shadowColor: "#000",
-    shadowOffset: { height: 2, width: 0 },
-    elevation: 3,
-    borderColor: "#35D96F",
-    borderWidth: 3,
+    shadowOffset: { height: 1, width: 0 },
+    elevation: 2,
+    borderWidth: 0.5,
+    borderColor: "#ddd",
     width: Dimensions.get("window").width / 2 - 50,
+    overflow: "hidden",
   },
   cardContent: {
-    alignItems: "center",
-    paddingVertical: 20,
-    paddingHorizontal: 10,
+    flexGrow: 1, // Take up all available space for the content
+    justifyContent: "center", // Space between image and text
+    alignItems: "center", // Center align items
+    padding: 16, // Padding inside the card
   },
   cardText: {
-    marginTop: 8,
     fontSize: 16,
-    fontWeight: "400",
+    fontWeight: "bold",
+    color: "#333",
+    position: "absolute", // Position text over the image
+    bottom: 10, // Distance from the bottom of the card
+    left: 10, // Distance from the left of the card
+    backgroundColor: "rgba(255, 255, 255, 0.7)", // Semi-transparent background
+    paddingVertical: 2,
+    paddingHorizontal: 5,
   },
   row: {
+    // flexDirection: "row",
     justifyContent: "space-between",
+  },
+  cardImage: {
+    width: "100%",
+    height: undefined, // Height is undefined to maintain aspect ratio
+    aspectRatio: 1.6, // Aspect ratio of the flag, adjust as needed
+    resizeMode: "cover", // Cover the entire area of the image container
   },
 });
