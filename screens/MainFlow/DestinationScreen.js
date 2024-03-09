@@ -52,17 +52,22 @@ function DestinationScreen({ route }) {
     }
   }, [country]);
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
     const imageUri =
       item.image && item.image.length > 0
         ? { uri: item.image[0] }
         : require("../../logo-1.png");
-    console.log("Country on dest", country);
-    console.log("City on destination", city);
-    console.log("locationId:", item.id);
+
+    // Check the number of items in your data array
+    const numColumns = destinations.length === 1 ? 1 : 2;
+    const width =
+      numColumns === 1
+        ? "95%" // Single item takes almost full width
+        : Dimensions.get("window").width / 2 - 20; // Two columns
+
     return (
       <TouchableOpacity
-        style={styles.card}
+        style={[styles.card, { width }]} // Apply dynamic width here
         onPress={() =>
           navigation.navigate("About Location", {
             country,
@@ -75,7 +80,7 @@ function DestinationScreen({ route }) {
         <View style={styles.cardContent}>
           <Text style={styles.cardTitle}>{item.name}</Text>
           <Text style={styles.cardDescription}>
-            {truncateDescription(item.description, 60)}
+            {truncateDescription(item.description, 100)}
           </Text>
         </View>
       </TouchableOpacity>
