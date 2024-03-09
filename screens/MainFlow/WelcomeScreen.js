@@ -57,7 +57,7 @@ const WelcomeScreen = () => {
 
   const renderCountryCard = ({ item }) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate("CityScreen", { country: item.name })}
+      onPress={() => navigation.navigate("Cities", { country: item.name })}
       style={styles.card}
     >
       <View style={styles.cardContent}>

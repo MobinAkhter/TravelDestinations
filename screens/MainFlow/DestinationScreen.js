@@ -51,7 +51,7 @@ function DestinationScreen({ route }) {
       style={styles.card}
     >
       <Image
-        source={{ uri: item.image || "../../assets/icon.png" }}
+        source={{ uri: item.image || "../../logo-1.png" }}
         style={styles.cardImage}
       />
       <View style={styles.cardContent}>

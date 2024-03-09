@@ -10,23 +10,23 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { collection, getDocs } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { db } from "../../firebase";
+import { db } from "../../firebase"; // Ensure this path is correct
 
-function CityScreen({ route }) {
+const CityScreen = ({ route }) => {
   const { country } = route.params;
   const navigation = useNavigation();
   const [cities, setCities] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Modified to accept a parameter determining whether to force refresh
-  const fetchCities = async (forceRefresh = false) => {
+  useEffect(() => {
+    fetchCities();
+  }, [country]);
+
+  const fetchCities = async () => {
     const cacheKey = `cities_${country}`;
     try {
-      // Fetch from cache unless forceRefresh is true
-      const cachedCities = forceRefresh
-        ? null
-        : await AsyncStorage.getItem(cacheKey);
-
+      setRefreshing(true);
+      let cachedCities = await AsyncStorage.getItem(cacheKey);
       if (cachedCities) {
         console.log("Loading cities from cache");
         setCities(JSON.parse(cachedCities));
@@ -44,39 +44,21 @@ function CityScreen({ route }) {
     } catch (error) {
       console.error("Error fetching cities:", error);
     } finally {
-      // Ensure refreshing is set to false once operation is complete
       setRefreshing(false);
     }
   };
 
-  useEffect(() => {
-    fetchCities();
-  }, [country]);
-
   const onRefresh = () => {
-    setRefreshing(true);
-    fetchCities(true); // Force refresh
+    AsyncStorage.removeItem(`cities_${country}`).then(fetchCities);
   };
-
-  const styles = StyleSheet.create({
-    rootContainer: {
-      flex: 1,
-      paddingTop: 14,
-    },
-    itemText: {
-      fontSize: 15,
-      color: "white",
-      textAlign: "center",
-      flexShrink: 1,
-      fontWeight: "bold",
-    },
-    // Define your getCardStyle function styles here
-  });
 
   const renderCityCard = ({ item }) => (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate("DestinationScreen", { country, city: item.name })
+        navigation.navigate("Significant Locations", {
+          country,
+          city: item.name,
+        })
       }
       style={getCardStyle(cities.length)}
     >
@@ -84,7 +66,6 @@ function CityScreen({ route }) {
     </TouchableOpacity>
   );
 
-  // Define your getCardStyle function here
   const getCardStyle = (numItems) => ({
     width:
       numItems <= 2
@@ -103,6 +84,7 @@ function CityScreen({ route }) {
     shadowOpacity: 0.3,
     shadowRadius: 2,
   });
+
   return (
     <View style={styles.rootContainer}>
       <FlatList
@@ -113,10 +95,23 @@ function CityScreen({ route }) {
         numColumns={3}
         refreshing={refreshing}
         onRefresh={onRefresh}
-        // columnWrapperStyle={styles.row} // Define if needed
       />
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+    paddingTop: 14,
+  },
+  itemText: {
+    fontSize: 15,
+    color: "white",
+    textAlign: "center",
+    flexShrink: 1,
+    fontWeight: "bold",
+  },
+});
 
 export default CityScreen;

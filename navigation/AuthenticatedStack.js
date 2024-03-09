@@ -32,8 +32,11 @@ function AuthenticatedStack() {
           ),
         })}
       />
-      <Stack.Screen name="CityScreen" component={CityScreen} />
-      <Stack.Screen name="DestinationScreen" component={DestinationScreen} />
+      <Stack.Screen name="Cities" component={CityScreen} />
+      <Stack.Screen
+        name="Significant Locations"
+        component={DestinationScreen}
+      />
       <Stack.Screen
         name="DetailedDestinationScreen"
         component={DetailedDestinationScreen}
