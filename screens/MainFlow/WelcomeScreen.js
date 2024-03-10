@@ -1,5 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -18,30 +18,88 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db } from "../../firebase";
 import MIcon from "../../components/ui/MIcon";
 import SearchBar from "../../components/ui/SearchBar";
-
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import {
+  InterstitialAd,
+  AdEventType,
+  TestIds,
+} from "react-native-google-mobile-ads";
+
+const adUnitId = __DEV__
+  ? TestIds.INTERSTITIAL
+  : "ca-app-pub-1134256608400195/5476614344";
 
 const WelcomeScreen = () => {
   const navigation = useNavigation();
   const [countries, setCountries] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
+  const interstitialAdRef = useRef(null);
+  const [adLoaded, setAdLoaded] = useState(false);
+
+  useEffect(() => {
+    // Initialize interstitial ad
+    interstitialAdRef.current = InterstitialAd.createForAdRequest(adUnitId);
+
+    const loadAd = () => {
+      interstitialAdRef.current.load();
+    };
+
+    const onAdLoaded = () => {
+      setAdLoaded(true);
+    };
+
+    const onAdClosed = () => {
+      // Ad closed by user, reload ad for next time
+      loadAd();
+    };
+
+    // Event listeners
+    const loadedListener = interstitialAdRef.current.addAdEventListener(
+      AdEventType.LOADED,
+      onAdLoaded
+    );
+    const closedListener = interstitialAdRef.current.addAdEventListener(
+      AdEventType.CLOSED,
+      onAdClosed
+    );
+
+    // Initial load
+    loadAd();
+
+    return () => {
+      // Cleanup
+      loadedListener.remove();
+      closedListener.remove();
+      interstitialAdRef.current = null;
+    };
+  }, []);
+
+  const showAdIfLoaded = () => {
+    return new Promise((resolve, reject) => {
+      if (adLoaded) {
+        interstitialAdRef.current
+          .show()
+          .then(() => {
+            setAdLoaded(false); // Reset adLoaded state after showing ad
+            resolve();
+          })
+          .catch(reject);
+      } else {
+        reject("Ad not loaded");
+      }
+    });
+  };
 
   useFocusEffect(
     React.useCallback(() => {
       navigation.setOptions({
         headerStyle: {
-          backgroundColor: "#35D96F", // Your default Welcome screen header color
+          backgroundColor: "#35D96F",
         },
       });
 
-      // If you're also changing the StatusBar color, reset that as well
       if (Platform.OS === "android") {
         StatusBar.setBackgroundColor("#35D96F");
       }
-
-      return () => {
-        // You can define any cleanup logic here if needed when the screen is unfocused
-      };
     }, [navigation])
   );
 
@@ -56,19 +114,16 @@ const WelcomeScreen = () => {
           key: doc.id,
         }));
 
-        // Compare loadedCountries with cachedCountries to decide if update is needed
         if (
           !cachedCountries ||
           JSON.stringify(loadedCountries) !== cachedCountries
         ) {
-          console.log("Updating countries from Firestore");
           setCountries(loadedCountries);
           await AsyncStorage.setItem(
             "countries",
             JSON.stringify(loadedCountries)
           );
         } else {
-          console.log("Loading countries from cache");
           setCountries(JSON.parse(cachedCountries));
         }
       } catch (error) {
@@ -78,9 +133,21 @@ const WelcomeScreen = () => {
     fetchCountries();
   }, []);
 
+  const handlePressCountry = (countryName) => {
+    showAdIfLoaded()
+      .then(() => {
+        navigation.navigate("Cities", { country: countryName });
+      })
+      .catch((error) => {
+        console.error(error);
+        // If ad is not loaded or an error occurs, navigate anyway
+        navigation.navigate("Cities", { country: countryName });
+      });
+  };
+
   const renderCountryCard = ({ item }) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate("Cities", { country: item.name })}
+      onPress={() => handlePressCountry(item.name)}
       style={styles.card}
     >
       <View style={styles.cardContent}>
@@ -90,21 +157,9 @@ const WelcomeScreen = () => {
     </TouchableOpacity>
   );
 
-  const navigateToSearchResult = () => {
-    navigation.navigate("Search Result", {
-      searchVal: searchInput,
-    });
-  };
-
   return (
     <KeyboardAvoidingView style={styles.rootContainer}>
       <SafeAreaView>
-        <SearchBar
-          searchValue={searchInput}
-          setSearchValue={setSearchInput}
-          placeholder="Search for cities/location"
-          onSearchPress={navigateToSearchResult}
-        />
         <View style={styles.countriesContainer}>
           <FlatList
             showsVerticalScrollIndicator={false}
@@ -171,24 +226,23 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   cardContent: {
-    flexGrow: 1, // Take up all available space for the content
-    justifyContent: "center", // Space between image and text
-    alignItems: "center", // Center align items
-    padding: 16, // Padding inside the card
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
   },
   cardText: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
-    position: "absolute", // Position text over the image
-    bottom: 10, // Distance from the bottom of the card
-    left: 10, // Distance from the left of the card
-    backgroundColor: "rgba(255, 255, 255, 0.7)", // Semi-transparent background
+    position: "absolute",
+    bottom: 10,
+    left: 10,
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
     paddingVertical: 2,
     paddingHorizontal: 5,
   },
   row: {
-    // flexDirection: "row",
     justifyContent: "space-between",
   },
   cardImage: {

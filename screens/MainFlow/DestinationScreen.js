@@ -8,6 +8,7 @@ import {
   StyleSheet,
   StatusBar,
   Platform,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../../firebase";
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     marginHorizontal: 10,
+    alignSelf: "center",
   },
   cardImage: { width: "100%", height: 150 },
   cardContent: { padding: 10 },

@@ -18,7 +18,7 @@ function AuthenticatedStack() {
         headerStyle: { backgroundColor: "#35D96F" },
         headerTintColor: "white",
         headerTitleAlign: "center",
-        contentStyle: { backgroundColor: "WHITE" },
+        contentStyle: { backgroundColor: "white" },
       }}
     >
       <Stack.Screen

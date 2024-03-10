@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -8,8 +8,11 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const DonationScreen = () => {
+  const navigation = useNavigation();
+
   const handleButtonPress = (url, platformName) => {
     Alert.alert(
       "Redirecting...",
@@ -23,6 +26,18 @@ const DonationScreen = () => {
       ]
     );
   };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: "#35D96F",
+      },
+      headerTitleStyle: {
+        color: "white", // Making the title white
+      },
+      headerTitleAlign: "center",
+    });
+  });
 
   return (
     <View style={styles.container}>

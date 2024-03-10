@@ -1,21 +1,21 @@
 {
   "expo": {
     "name": "Muslim Travel Destinations",
-    "slug": "MuslimTravelDestinations", 
+    "slug": "MuslimTravelDestinations",
     "plugins": [
-  [
-    "expo-build-properties",
-    {
-      "android": {
-        "compileSdkVersion": 33,
-        "targetSdkVersion": 33,
-        "buildToolsVersion": "33.0.0",
-        "enableProguardInReleaseBuilds": true,
-        "allowBackup": false
-      }
-    }
-  ]
-],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 33,
+            "targetSdkVersion": 33,
+            "buildToolsVersion": "33.0.0",
+            "enableProguardInReleaseBuilds": true,
+            "allowBackup": false
+          }
+        }
+      ]
+    ],
     "version": "1.0.29",
     "orientation": "default",
     "icon": "./logo-1.png",
@@ -28,7 +28,6 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -46,10 +45,16 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    
     "extra": {
       "eas": {
-        "projectId": "69fdaf26-a06a-40a2-a56f-00da5c583aae"
+        "projectId": "569df2a6-510f-4fae-ab35-85b1b7114bdc"
       }
     }
-  }
+  },
+  "react-native-google-mobile-ads": {
+      "android_app_id": "ca-app-pub-1134256608400195~8547051693"
+    }
 }
+
+

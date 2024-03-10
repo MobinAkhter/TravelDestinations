@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const ContactScreen = () => {
   const [name, setName] = useState("");
@@ -14,10 +15,24 @@ const ContactScreen = () => {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
 
+  const navigation = useNavigation();
+
   const validateEmail = (email) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return regex.test(email);
   };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: "#35D96F",
+      },
+      headerTitleStyle: {
+        color: "white", // Making the title white
+      },
+      headerTitleAlign: "center",
+    });
+  });
 
   const handleSubmit = () => {
     if (!name || !email || !subject || !message) {
@@ -99,7 +114,7 @@ const ContactScreen = () => {
       />
       <TextInput
         style={[styles.input, styles.textArea]}
-        placeholder="Please let us know if something in the app should be fixed, or share any new functionality you'd like to see, etc."
+        placeholder="Please let us know if something in the app should be fixed, or share any new destination you'd like us to add in the app, etc."
         multiline={true}
         numberOfLines={4}
         value={message}

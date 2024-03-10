@@ -11,12 +11,10 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { collection, getDocs } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { db } from "../../firebase"; // Ensure this path is correct
+import { db } from "../../firebase";
 import { countryThemeColors } from "../../constants/themeColors";
 
 function getComplementaryTextColor(backgroundColor) {
-  // This is a very simplified check and works well for colors
-  // that are either very light or very dark.
   const color = backgroundColor.replace("#", "");
   const r = parseInt(color.substr(0, 2), 16);
   const g = parseInt(color.substr(2, 2), 16);
@@ -36,15 +34,14 @@ const CityScreen = ({ route }) => {
   }, [country]);
 
   useEffect(() => {
-    const themeColor = countryThemeColors[country] || "#FFFFFF"; // Default to white if no color is found
+    const themeColor = countryThemeColors[country] || "#FFFFFF";
     navigation.setOptions({
       headerStyle: {
         backgroundColor: themeColor,
       },
-      headerTintColor: "#fff", // Adjust the back button and title color if needed
+      headerTintColor: "#fff",
     });
 
-    // If you're also changing the StatusBar color, set that here
     if (Platform.OS === "android") {
       StatusBar.setBackgroundColor(themeColor);
       StatusBar.setBarStyle("light-content"); // or 'dark-content'
@@ -82,8 +79,6 @@ const CityScreen = ({ route }) => {
   const renderCityCard = ({ item }) => {
     const backgroundColor = countryThemeColors[country] || "#DDD"; // Default color if country is not in the mapping
     const textColor = getComplementaryTextColor(backgroundColor);
-    console.log("COUNTRY", country);
-    console.log("CITY", item.name);
 
     return (
       <TouchableOpacity

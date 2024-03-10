@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const AboutUsScreen = () => {
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: "#35D96F",
+      },
+      headerTitleStyle: {
+        color: "white", // Making the title white
+      },
+      headerTitleAlign: "center",
+    });
+  });
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>About Us</Text>
