@@ -8,6 +8,7 @@ import SearchResultScreen from "../screens/SearchResultScreen";
 import DonationScreen from "../screens/SecondaryScreens/DonationScreen";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import SplashScreen from "../screens/Auth/SplashScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,12 +22,16 @@ function AuthenticatedStack() {
         contentStyle: { backgroundColor: "white" },
       }}
     >
+      <Stack.Screen name="SplashScreen" component={SplashScreen} />
       <Stack.Screen
         name="Welcome"
         component={WelcomeScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+            <TouchableOpacity
+              onPress={() => navigation.toggleDrawer()}
+              accessibilityLabel="Navigation Menu"
+            >
               <Ionicons name="menu-outline" size={28} />
             </TouchableOpacity>
           ),

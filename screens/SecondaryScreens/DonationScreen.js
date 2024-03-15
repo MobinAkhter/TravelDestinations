@@ -43,10 +43,12 @@ const DonationScreen = () => {
     <View style={styles.container}>
       <Text style={styles.header}>Support Our Mission</Text>
       <Text style={styles.explanationText}>
-        Your support allows us to continue sharing the profound benefits of
-        herbs, advancing our app, and keeping it free of ads. Every cup of
-        coffee you buy us fuels our passion and ability to bring ancient herbal
-        wisdom to the palm of your hand.
+        Your contributions empower us to enhance this journey of discovery. With
+        every donation, you become a part of our mission to illuminate the rich
+        tapestry of Muslim cultures and histories. Together, we can expand our
+        horizons, bringing treasured insights and destinations closer to those
+        who seek them. Your support is more than a donation—it's a bridge
+        connecting travelers to the vast and vibrant Muslim world.
       </Text>
 
       <TouchableOpacity

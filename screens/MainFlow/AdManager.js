@@ -1,7 +1,6 @@
 import { InterstitialAd, AdEventType } from "react-native-google-mobile-ads";
 
-const interstitialAdUnitId = "ca-app-pub-1134256608400195/5476614344"; // Your Interstitial Ad unit ID
-
+const interstitialAdUnitId = "ca-app-pub-1134256608400195/5476614344";
 let interstitialAd;
 
 export const loadInterstitialAd = () => {

@@ -13,16 +13,17 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../../firebase";
 import { countryThemeColors } from "../../constants/themeColors";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 function DestinationScreen({ route }) {
   const { country, city } = route.params;
   const navigation = useNavigation();
   const [destinations, setDestinations] = useState([]);
+  const [filter, setFilter] = useState("All");
 
   useEffect(() => {
     const fetchDestinations = async () => {
-      const destinationsRef = collection(
+      let destinationsRef = collection(
         db,
         "Countries",
         country,
@@ -30,16 +31,23 @@ function DestinationScreen({ route }) {
         city,
         "Locations"
       );
+      if (filter !== "All") {
+        destinationsRef = query(destinationsRef, where("type", "==", filter));
+      }
       const querySnapshot = await getDocs(destinationsRef);
       const loadedDestinations = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
-      setDestinations(loadedDestinations);
+      setDestinations(
+        loadedDestinations.filter(
+          (doc) => doc.type === filter || filter === "All" || !doc.type
+        )
+      );
     };
 
     fetchDestinations();
-  }, [country, city]);
+  }, [country, city, filter]);
 
   useEffect(() => {
     const themeColor = countryThemeColors[country] || "#FFFFFF";
@@ -59,16 +67,13 @@ function DestinationScreen({ route }) {
         ? { uri: item.image[0] }
         : require("../../logo-1.png");
 
-    // Check the number of items in your data array
     const numColumns = destinations.length === 1 ? 1 : 2;
     const width =
-      numColumns === 1
-        ? "95%" // Single item takes almost full width
-        : Dimensions.get("window").width / 2 - 20; // Two columns
+      numColumns === 1 ? "95%" : Dimensions.get("window").width / 2 - 20;
 
     return (
       <TouchableOpacity
-        style={[styles.card, { width }]} // Apply dynamic width here
+        style={[styles.card, { width }]}
         onPress={() =>
           navigation.navigate("About Location", {
             country,
@@ -95,6 +100,28 @@ function DestinationScreen({ route }) {
 
   return (
     <View style={styles.rootContainer}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-around",
+          padding: 10,
+        }}
+      >
+        {["All", "Historical", "Religious"].map((f) => (
+          <TouchableOpacity
+            key={f}
+            onPress={() => setFilter(f)}
+            style={{
+              padding: 10,
+              backgroundColor: filter === f ? "#007BFF" : "#E0E0E0",
+            }}
+          >
+            <Text style={{ color: filter === f ? "#FFFFFF" : "#000000" }}>
+              {f}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
       <FlatList
         data={destinations}
         renderItem={renderItem}

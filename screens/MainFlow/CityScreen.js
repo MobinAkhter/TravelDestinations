@@ -35,7 +35,9 @@ const CityScreen = ({ route }) => {
 
   useEffect(() => {
     const themeColor = countryThemeColors[country] || "#FFFFFF";
+    const headerTitle = `Cities of ${country}`;
     navigation.setOptions({
+      headerTitle,
       headerStyle: {
         backgroundColor: themeColor,
       },
@@ -46,7 +48,7 @@ const CityScreen = ({ route }) => {
       StatusBar.setBackgroundColor(themeColor);
       StatusBar.setBarStyle("light-content"); // or 'dark-content'
     }
-  }, [country]);
+  }, [country, navigation]);
 
   const fetchCities = async () => {
     const cacheKey = `cities_${country}`;
@@ -94,6 +96,15 @@ const CityScreen = ({ route }) => {
       </TouchableOpacity>
     );
   };
+  if (cities.length === 0) {
+    return (
+      <View style={styles.rootContainer}>
+        <Text style={styles.noCitiesText}>
+          No cities available at the moment. Check back soon!
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.rootContainer}>
@@ -134,6 +145,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     flexShrink: 1,
     fontWeight: "bold",
+  },
+  noCitiesText: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 16,
+    color: "#666",
   },
 });
 

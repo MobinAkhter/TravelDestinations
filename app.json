@@ -16,7 +16,7 @@
         }
       ]
     ],
-    "version": "1.0.29",
+    "version": "1.0.32",
     "orientation": "default",
     "icon": "./logo-1.png",
     "userInterfaceStyle": "light",
@@ -32,7 +32,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mobinakhter123.MuslimTravelDestinations"
     },
     "android": {
       "adaptiveIcon": {
@@ -40,12 +41,16 @@
         "backgroundColor": "#35D96F"
       },
       "package": "com.mobinakhter123.MuslimTravelDestinations",
-      "versionCode": 29
+      "versionCode": 32,
+      "config": {
+        "googleMaps" : {
+          "apiKey": "AIzaSyD19WpKBykiCtowg08wmvP0d7Tn07p9XSg"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    
     "extra": {
       "eas": {
         "projectId": "569df2a6-510f-4fae-ab35-85b1b7114bdc"
@@ -53,8 +58,6 @@
     }
   },
   "react-native-google-mobile-ads": {
-      "android_app_id": "ca-app-pub-1134256608400195~8547051693"
-    }
+    "android_app_id": "ca-app-pub-1134256608400195~8547051693"
+  }
 }
-
-

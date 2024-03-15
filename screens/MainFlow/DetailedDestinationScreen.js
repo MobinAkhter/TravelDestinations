@@ -17,7 +17,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { countryThemeColors } from "../../constants/themeColors";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { Modal } from "react-native";
 import { PinchGestureHandler, State } from "react-native-gesture-handler";
 import Animated, {
@@ -26,9 +26,6 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { BannerAd, BannerAdSize } from "react-native-google-mobile-ads";
-
-const adUnitId = "ca-app-pub-1134256608400195/2590704352";
 
 const openMaps = (lat, lng, label) => {
   // Depending on the platform, the URL scheme may differ
@@ -170,6 +167,8 @@ const DetailedDestinationScreen = () => {
               key={index}
               style={styles.slide}
               onPress={() => openImageFullScreen(img)}
+              accessible={true}
+              accessibilityLabel={`Image ${index + 1} for ${destination.name}`}
             >
               <Image style={styles.image} source={{ uri: img }} />
             </TouchableOpacity>
@@ -221,6 +220,7 @@ const DetailedDestinationScreen = () => {
           <View>
             <MapView
               style={styles.map}
+              provider={PROVIDER_GOOGLE}
               initialRegion={{
                 latitude: destination.location.latitude,
                 longitude: destination.location.longitude,
@@ -257,13 +257,6 @@ const DetailedDestinationScreen = () => {
           <Text>Share this place</Text>
         </TouchableOpacity>
       </View>
-      <BannerAd
-        unitId={adUnitId}
-        size={BannerAdSize.BANNER}
-        requestOptions={{
-          requestNonPersonalizedAdsOnly: true,
-        }}
-      />
     </ScrollView>
   );
 };

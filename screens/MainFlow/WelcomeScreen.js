@@ -16,7 +16,6 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db } from "../../firebase";
-import MIcon from "../../components/ui/MIcon";
 import SearchBar from "../../components/ui/SearchBar";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import {
@@ -36,7 +35,6 @@ const WelcomeScreen = () => {
   const [adLoaded, setAdLoaded] = useState(false);
 
   useEffect(() => {
-    // Initialize interstitial ad
     interstitialAdRef.current = InterstitialAd.createForAdRequest(adUnitId);
 
     const loadAd = () => {
@@ -62,11 +60,9 @@ const WelcomeScreen = () => {
       onAdClosed
     );
 
-    // Initial load
     loadAd();
 
     return () => {
-      // Cleanup
       loadedListener.remove();
       closedListener.remove();
       interstitialAdRef.current = null;
@@ -79,7 +75,7 @@ const WelcomeScreen = () => {
         interstitialAdRef.current
           .show()
           .then(() => {
-            setAdLoaded(false); // Reset adLoaded state after showing ad
+            setAdLoaded(false);
             resolve();
           })
           .catch(reject);

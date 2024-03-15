@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, Animated, Easing, Dimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Animated,
+  Easing,
+  Dimensions,
+  StatusBar,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 const { width } = Dimensions.get("window");
@@ -9,16 +16,19 @@ const SplashScreen = ({ navigation }) => {
   const scaleAnim = new Animated.Value(0);
 
   useEffect(() => {
+    StatusBar.setBarStyle("light-content");
+    navigation.setOptions({ headerTitle: "Muslim Travel" }); // Set the header title
+
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 2000,
+        duration: 1500,
         useNativeDriver: true,
       }),
       Animated.timing(scaleAnim, {
         toValue: 1,
-        duration: 2000,
-        easing: Easing.elastic(1),
+        duration: 1500,
+        easing: Easing.elastic(1.2),
         useNativeDriver: true,
       }),
     ]).start();
@@ -32,9 +42,9 @@ const SplashScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={["#ffffff", "#35D96F"]} style={styles.background}>
+      <LinearGradient colors={["#f2f2f2", "#d4e9e2"]} style={styles.background}>
         <Animated.Image
-          source={require("../../transparentlogo.png")}
+          source={require("../../assets/crescent.jpeg")}
           resizeMode="contain"
           style={[
             styles.logo,
@@ -45,7 +55,7 @@ const SplashScreen = ({ navigation }) => {
           ]}
         />
         <Animated.Text style={[styles.title, { opacity: fadeAnim }]}>
-          Welcome to Muslim Travel Experiences
+          Welcome to Muslim Travel
         </Animated.Text>
         <Animated.Text style={[styles.subtitle, { opacity: fadeAnim }]}>
           Discover the making of the Muslim world
@@ -70,15 +80,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#FFFFFF",
+    fontSize: 28,
+    fontWeight: "800",
+    color: "#3A5A40",
     marginBottom: 10,
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
   subtitle: {
-    fontSize: 20,
-    color: "#FFFFFF",
+    fontSize: 18,
+    color: "#3A5A40",
     marginTop: 5,
+    fontStyle: "italic",
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
 });
 
