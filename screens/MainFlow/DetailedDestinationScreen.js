@@ -26,6 +26,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
+import { SimpleLineIcons } from "@expo/vector-icons";
 
 const openMaps = (lat, lng, label) => {
   // Depending on the platform, the URL scheme may differ
@@ -108,10 +109,17 @@ const DetailedDestinationScreen = () => {
   useEffect(() => {
     if (destination) {
       navigation.setOptions({
-        title: destination.name, // Set the header title to the destination name
+        title: destination.name,
+        headerRight: () => (
+          <View style={{ flexDirection: "row" }}>
+            <TouchableOpacity style={{ marginRight: 16 }} onPress={onShare}>
+              <SimpleLineIcons name="share" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+        ),
       });
     }
-  }, [destination, navigation]);
+  }, [navigation, destination]);
 
   useEffect(() => {
     const themeColor = countryThemeColors[country] || "#FFFFFF";
@@ -159,7 +167,7 @@ const DetailedDestinationScreen = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {destination.image && destination.image.length > 0 ? (
         <Swiper height={240} activeDotColor="#FFF">
           {destination.image.map((img, index) => (
@@ -213,8 +221,12 @@ const DetailedDestinationScreen = () => {
         <Text style={styles.title}>{destination.name}</Text>
         <Text style={styles.description}>{destination.description}</Text>
         {/* Display additional fields as needed */}
-        <Text style={styles.info}>{destination.historical}</Text>
-        <Text style={styles.info}>{destination.info}</Text>
+        <Text style={styles.info}>
+          Historical significance: {destination.historical}
+        </Text>
+        <Text style={styles.info}>
+          Interesting information: {destination.info}
+        </Text>
         {/* Location and Nearloc fields might require additional formatting if they are not simple strings */}
         {destination.location && (
           <View>
@@ -251,11 +263,9 @@ const DetailedDestinationScreen = () => {
           </View>
         )}
         <Text style={styles.info}>{`Nearby: ${destination.nearloc}`}</Text>
-        <Text style={styles.info}>{destination.visitorinfo}</Text>
-
-        <TouchableOpacity onPress={onShare} style={styles.shareButton}>
-          <Text>Share this place</Text>
-        </TouchableOpacity>
+        <Text style={styles.info}>
+          Information For Visitors: {destination.visitorinfo}
+        </Text>
       </View>
     </ScrollView>
   );
@@ -264,7 +274,7 @@ const DetailedDestinationScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff", // Light background to improve readability
+    backgroundColor: "#ffffff", // Clean white background
   },
   loadingContainer: {
     flex: 1,
@@ -272,88 +282,92 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   detailSection: {
-    padding: 20, // Increase padding for better spacing
-    backgroundColor: "#f8f9fa", // Slightly off-white background to reduce glare
+    paddingHorizontal: 20, // Space on the sides for a comfortable reading margin
+    paddingBottom: 20,
+    backgroundColor: "#fafafa", // Light gray to distinguish sections without stark contrast
   },
   title: {
-    fontSize: 26, // Increase font size for better visibility
+    fontSize: 24, // Large font size for title
     fontWeight: "bold",
-    color: "#212529", // Dark color for better contrast
-    marginBottom: 16, // Increase space after the title
+    color: "#212121", // Darker color for the title for emphasis
+    marginTop: 24,
+    marginBottom: 16, // Space after the title
   },
   description: {
-    fontSize: 18,
-    lineHeight: 24, // Increase lineHeight for better readability
-    color: "#495057", // Softer color to reduce eye strain
-    marginBottom: 12,
+    fontSize: 18, // Comfortable reading size for description
+    lineHeight: 24, // Appropriate line height for readability
+    color: "#444444", // Slightly lighter than the title to differentiate
+    marginBottom: 20, // Space after the description
   },
   info: {
     fontSize: 16,
     lineHeight: 22,
+    color: "#666", // Subtle color for informational text
     marginBottom: 10,
-    color: "#343a40", // Ensuring good contrast for readability
   },
   shareButton: {
-    marginTop: 12,
-    padding: 12,
-    backgroundColor: "#007bff", // Use a vibrant color for action items
+    marginTop: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: "#007bff", // Blue color for call-to-action button
     borderRadius: 8,
-    alignSelf: "center",
+    alignSelf: "flex-start", // Align to the start for easy thumb reach
   },
   slide: {
-    flex: 1,
+    height: 240, // Maintain consistent height for images
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "transparent",
   },
   image: {
     width: "100%",
-    height: 200, // Fixed height for consistency
-    borderRadius: 8, // Rounded corners for a softer look
-    marginBottom: 16, // Space after the image
+    height: "100%", // Image takes full space of the swiper
+    resizeMode: "cover", // Cover the whole swiper area
   },
   map: {
-    height: 200, // or another appropriate size for your layout
+    height: 200,
+    borderRadius: 8, // Rounded corners for map
+    marginVertical: 20, // Space before and after map
   },
   directionButton: {
-    padding: 10,
-    backgroundColor: "#007bff",
-    borderRadius: 5,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: "#28a745", // Green color for direction button
+    borderRadius: 8,
     alignSelf: "center",
-    marginTop: 10,
+    marginTop: 8,
+    color: "#fff",
+    marginBottom: 8,
   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.8)",
+    backgroundColor: "rgba(0,0,0,0.8)", // Dark background for modal focus
   },
   modalView: {
-    width: "90%", // Take up to 90% of screen width
-    height: "90%", // Take up to 90% of screen height
+    width: "90%",
+    height: "75%", // Height adjusted to show some background
     backgroundColor: "white",
-    borderRadius: 20,
-    padding: 10, // Adjust padding as needed
+    borderRadius: 12,
+    padding: 20,
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
   },
   fullScreenImage: {
-    width: "100%", // You can adjust this
-    height: "100%", // You can adjust this
-    resizeMode: "cover", // Ensures the image fits and is centered
+    width: "100%",
+    height: "100%",
+    borderRadius: 8, // Consistent rounded corners
   },
   modalCloseButton: {
-    padding: 10,
-    elevation: 2,
-    backgroundColor: "#2196F3",
-    borderRadius: 5,
+    position: "absolute",
+    top: 10,
+    right: 10,
+    padding: 8,
+    backgroundColor: "#dc3545", // Red color for close button
+    borderRadius: 16,
   },
   textStyle: {
     color: "white",
@@ -361,8 +375,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   noImageText: {
-    color: "#6c757d", // Soft color for text indicating no images are available
-    fontStyle: "italic", // Style to indicate this is a status message, not data
+    fontStyle: "italic",
+    color: "#6c757d",
   },
 });
 

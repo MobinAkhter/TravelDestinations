@@ -105,20 +105,17 @@ const WelcomeScreen = () => {
         const cachedCountries = await AsyncStorage.getItem("countries");
         const countriesCollectionRef = collection(db, "Countries");
         const querySnapshot = await getDocs(countriesCollectionRef);
-        const loadedCountries = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          key: doc.id,
-        }));
+        const loadedCountries = querySnapshot.docs
+          .map((doc) => ({
+            ...doc.data(),
+            key: doc.id,
+          }))
+          .filter((country) => country.hasCities !== false); // Filter out countries that explicitly have hasCities set to false
 
-        if (
-          !cachedCountries ||
-          JSON.stringify(loadedCountries) !== cachedCountries
-        ) {
+        const countriesToCache = JSON.stringify(loadedCountries);
+        if (!cachedCountries || countriesToCache !== cachedCountries) {
           setCountries(loadedCountries);
-          await AsyncStorage.setItem(
-            "countries",
-            JSON.stringify(loadedCountries)
-          );
+          await AsyncStorage.setItem("countries", countriesToCache);
         } else {
           setCountries(JSON.parse(cachedCountries));
         }

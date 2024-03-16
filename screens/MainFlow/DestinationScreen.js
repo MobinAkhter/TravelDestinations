@@ -20,6 +20,8 @@ function DestinationScreen({ route }) {
   const navigation = useNavigation();
   const [destinations, setDestinations] = useState([]);
   const [filter, setFilter] = useState("All");
+  const themeColor = countryThemeColors[country] || "#FFFFFF";
+  const inactiveColor = `${themeColor}80`;
 
   useEffect(() => {
     const fetchDestinations = async () => {
@@ -50,7 +52,6 @@ function DestinationScreen({ route }) {
   }, [country, city, filter]);
 
   useEffect(() => {
-    const themeColor = countryThemeColors[country] || "#FFFFFF";
     navigation.setOptions({
       headerStyle: { backgroundColor: themeColor },
       headerTintColor: "#fff",
@@ -59,9 +60,9 @@ function DestinationScreen({ route }) {
       StatusBar.setBackgroundColor(themeColor);
       StatusBar.setBarStyle("light-content");
     }
-  }, [country]);
+  }, [country, navigation, themeColor]);
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({ item }) => {
     const imageUri =
       item.image && item.image.length > 0
         ? { uri: item.image[0] }
@@ -86,7 +87,7 @@ function DestinationScreen({ route }) {
         <View style={styles.cardContent}>
           <Text style={styles.cardTitle}>{item.name}</Text>
           <Text style={styles.cardDescription}>
-            {truncateDescription(item.description, 100)}
+            {truncateDescription(item.description, 95)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -98,28 +99,33 @@ function DestinationScreen({ route }) {
       ? `${description.substring(0, maxLength - 3)}...`
       : description;
 
+  const FilterButton = ({ title, active }) => (
+    <TouchableOpacity
+      onPress={() => setFilter(title)}
+      style={[
+        styles.filterButtonContainer,
+        {
+          borderColor: themeColor,
+          backgroundColor: active ? themeColor : "white",
+        },
+      ]}
+    >
+      <Text
+        style={[
+          styles.filterButtonText,
+          { color: active ? "#FFFFFF" : themeColor },
+        ]}
+      >
+        {title}
+      </Text>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.rootContainer}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-around",
-          padding: 10,
-        }}
-      >
+      <View style={styles.filterContainer}>
         {["All", "Historical", "Religious"].map((f) => (
-          <TouchableOpacity
-            key={f}
-            onPress={() => setFilter(f)}
-            style={{
-              padding: 10,
-              backgroundColor: filter === f ? "#007BFF" : "#E0E0E0",
-            }}
-          >
-            <Text style={{ color: filter === f ? "#FFFFFF" : "#000000" }}>
-              {f}
-            </Text>
-          </TouchableOpacity>
+          <FilterButton key={f} title={f} active={filter === f} />
         ))}
       </View>
       <FlatList
@@ -128,6 +134,7 @@ function DestinationScreen({ route }) {
         keyExtractor={(item) => item.id}
         numColumns={2}
         columnWrapperStyle={styles.row}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
@@ -141,7 +148,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     padding: 10,
   },
-  row: { justifyContent: "space-around" },
+  row: {
+    justifyContent: "space-around",
+  },
   card: {
     backgroundColor: "#ffffff",
     borderRadius: 8,
@@ -157,10 +166,57 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     alignSelf: "center",
   },
-  cardImage: { width: "100%", height: 150 },
-  cardContent: { padding: 10 },
-  cardTitle: { fontWeight: "bold", fontSize: 18, marginBottom: 5 },
-  cardDescription: { color: "#666", marginBottom: 10 },
+  cardImage: {
+    width: "100%",
+    height: 150,
+  },
+  cardContent: {
+    padding: 10,
+  },
+  cardTitle: {
+    fontWeight: "bold",
+    fontSize: 18,
+    marginBottom: 5,
+  },
+  cardDescription: {
+    color: "#666",
+    marginBottom: 10,
+  },
+  filterContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  filterButtonContainer: {
+    flex: 1,
+    marginHorizontal: 5,
+    paddingVertical: 8,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  filterButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  filterButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
 });
 
 export default DestinationScreen;
