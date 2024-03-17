@@ -221,12 +221,15 @@ const DetailedDestinationScreen = () => {
         <Text style={styles.title}>{destination.name}</Text>
         <Text style={styles.description}>{destination.description}</Text>
         {/* Display additional fields as needed */}
-        <Text style={styles.info}>
-          Historical significance: {destination.historical}
+        <Text style={[styles.info, styles.infoTitle]}>
+          Historical significance
         </Text>
-        <Text style={styles.info}>
-          Interesting information: {destination.info}
+        <Text style={styles.info}>{destination.historical}</Text>
+
+        <Text style={[styles.info, styles.infoTitle]}>
+          Interesting information
         </Text>
+        <Text style={styles.info}>{destination.info}</Text>
         {/* Location and Nearloc fields might require additional formatting if they are not simple strings */}
         {destination.location && (
           <View>
@@ -262,10 +265,13 @@ const DetailedDestinationScreen = () => {
             </TouchableOpacity>
           </View>
         )}
-        <Text style={styles.info}>{`Nearby: ${destination.nearloc}`}</Text>
-        <Text style={styles.info}>
-          Information For Visitors: {destination.visitorinfo}
+        <Text style={[styles.info, styles.infoTitle]}>Nearby</Text>
+        <Text style={styles.info}>{destination.nearloc}</Text>
+
+        <Text style={[styles.info, styles.infoTitle]}>
+          Information For Visitors
         </Text>
+        <Text style={styles.info}>{destination.visitorinfo}</Text>
       </View>
     </ScrollView>
   );
@@ -274,7 +280,7 @@ const DetailedDestinationScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff", // Clean white background
+    backgroundColor: "#ffffff",
   },
   loadingContainer: {
     flex: 1,
@@ -282,28 +288,34 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   detailSection: {
-    paddingHorizontal: 20, // Space on the sides for a comfortable reading margin
+    paddingHorizontal: 20,
     paddingBottom: 20,
-    backgroundColor: "#fafafa", // Light gray to distinguish sections without stark contrast
+    backgroundColor: "#fafafa",
   },
   title: {
-    fontSize: 24, // Large font size for title
+    fontSize: 24,
     fontWeight: "bold",
-    color: "#212121", // Darker color for the title for emphasis
+    color: "#212121",
     marginTop: 24,
-    marginBottom: 16, // Space after the title
+    marginBottom: 4,
   },
   description: {
-    fontSize: 18, // Comfortable reading size for description
-    lineHeight: 24, // Appropriate line height for readability
-    color: "#444444", // Slightly lighter than the title to differentiate
-    marginBottom: 20, // Space after the description
+    fontSize: 18,
+    lineHeight: 24,
+    color: "#444444",
+    marginBottom: 4,
+  },
+  infoTitle: {
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 4,
+    color: "#343a40",
   },
   info: {
     fontSize: 16,
     lineHeight: 22,
     color: "#666", // Subtle color for informational text
-    marginBottom: 10,
+    marginBottom: 4,
   },
   shareButton: {
     marginTop: 16,

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
+  RefreshControl,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -75,13 +77,17 @@ const CityScreen = ({ route }) => {
   };
 
   const onRefresh = () => {
-    AsyncStorage.removeItem(`cities_${country}`).then(fetchCities);
+    AsyncStorage.removeItem(`cities_${country}`)
+      .then(fetchCities)
+      .catch((error) => {
+        console.error("Error on refreshing cities:", error);
+      })
+      .finally(() => setRefreshing(false));
   };
 
   const renderCityCard = ({ item }) => {
-    const backgroundColor = countryThemeColors[country] || "#DDD"; // Default color if country is not in the mapping
+    const backgroundColor = countryThemeColors[country] || "#DDD";
     const textColor = getComplementaryTextColor(backgroundColor);
-
     return (
       <TouchableOpacity
         onPress={() =>
@@ -96,29 +102,39 @@ const CityScreen = ({ route }) => {
       </TouchableOpacity>
     );
   };
-  if (cities.length === 0) {
+  if (cities.length > 0) {
     return (
-      <View style={styles.rootContainer}>
-        <Text style={styles.noCitiesText}>
-          No cities available at the moment. Check back soon!
-        </Text>
-      </View>
-    );
-  }
-
-  return (
-    <View style={styles.rootContainer}>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={cities}
         renderItem={renderCityCard}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         numColumns={3}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
+        contentContainerStyle={{ flexGrow: 1 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
-    </View>
-  );
+    );
+  } else {
+    return (
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <Text style={styles.noCitiesText}>
+          No cities available at the moment. Manually refresh by pulling down
+          from the top of the screen. Otherwise, check back soon!
+        </Text>
+      </ScrollView>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
