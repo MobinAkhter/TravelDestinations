@@ -26,7 +26,10 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
+import * as Speech from "expo-speech";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const openMaps = (lat, lng, label) => {
   // Depending on the platform, the URL scheme may differ
@@ -51,6 +54,22 @@ const DetailedDestinationScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [voices, setVoices] = useState([]);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const preferredVoices = [
+    { name: "Rishi", identifier: "com.apple.voice.compact.en-IN.Rishi" },
+    { name: "Samantha", identifier: "com.apple.voice.compact.en-US.Samantha" },
+    { name: "Daniel", identifier: "com.apple.voice.compact.en-GB.Daniel" },
+    { name: "Karen", identifier: "com.apple.voice.compact.en-AU.Karen" },
+    { name: "Moira", identifier: "com.apple.voice.compact.en-IE.Moira" },
+  ];
+  const [selectedVoice, setSelectedVoice] = useState(
+    preferredVoices[2].identifier
+  );
+  const [speechRate, setSpeechRate] = useState(1.0);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [spokenText, setSpokenText] = useState("");
 
   const scale = useSharedValue(1);
   const focalX = useSharedValue(0);
@@ -76,6 +95,79 @@ const DetailedDestinationScreen = () => {
       { translateY: -focalY.value },
     ],
   }));
+
+  const increaseSpeechRate = () => {
+    const newRate = speechRate + 0.1; // Increase the speech rate by 0.1
+    setSpeechRate(newRate); // Update the speech rate state
+    stopSpeech(); // Stop the current speech synthesis process
+    speak(spokenText, newRate); // Start a new speech synthesis process with the updated rate
+  };
+  const speak = (text, rate = speechRate) => {
+    setIsSpeaking(true);
+    setSpokenText(text);
+    const textChunks = chunkText(text, 4000);
+    speakChunks(textChunks, rate);
+  };
+
+  const speakChunks = (chunks, rate) => {
+    if (chunks.length === 0) {
+      setIsSpeaking(false);
+      return;
+    }
+
+    const chunk = chunks.shift();
+    Speech.speak(chunk, {
+      rate,
+      voice: selectedVoice,
+      onStart: () => {
+        setIsSpeaking(true);
+      },
+      onDone: () => {
+        speakChunks(chunks, rate);
+      },
+    });
+  };
+  const stopSpeech = () => {
+    Speech.stop();
+    setIsSpeaking(false);
+    setSpokenText("");
+  };
+
+  const resumeSpeech = () => {
+    if (spokenText) {
+      speak(spokenText, speechRate);
+    }
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    Speech.getAvailableVoicesAsync().then((availableVoices) => {
+      if (isMounted) {
+        // Filter only the 5 preferred voices. Daniel will be the initial voice, cause that guy sounds best imo.
+        const filteredVoices = availableVoices.filter((voice) =>
+          preferredVoices.some(
+            (pVoice) => pVoice.identifier === voice.identifier
+          )
+        );
+        setVoices(filteredVoices);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      Speech.stop();
+    };
+  }, []);
+
+  function chunkText(text, maxLength) {
+    const chunks = [];
+    let i = 0;
+    while (i < text.length) {
+      chunks.push(text.substring(i, i + maxLength));
+      i += maxLength;
+    }
+    return chunks;
+  }
 
   useEffect(() => {
     const fetchDestinationDetails = async () => {
@@ -165,9 +257,30 @@ const DetailedDestinationScreen = () => {
       </View>
     );
   }
+  function composeTextToSpeak() {
+    let textToSpeak = "";
+    const { description, historical, info, nearloc, visitorinfo } = destination; // Destructuring for easier access
 
+    if (description) {
+      textToSpeak += `${description}\n`;
+    }
+    if (historical) {
+      textToSpeak += `Historical Significance: ${historical}\n`;
+    }
+    if (info) {
+      textToSpeak += `Interesting Information: ${info}\n`;
+    }
+    if (nearloc) {
+      textToSpeak += `Nearby Locations: ${nearloc}\n`;
+    }
+    if (visitorinfo) {
+      textToSpeak += `Visitor Information: ${visitorinfo}`;
+    }
+    return textToSpeak;
+  }
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {/* Swiper for destination images or a placeholder if no images are available */}
       {destination.image && destination.image.length > 0 ? (
         <Swiper height={240} activeDotColor="#FFF">
           {destination.image.map((img, index) => (
@@ -188,6 +301,7 @@ const DetailedDestinationScreen = () => {
         </View>
       )}
 
+      {/* Modal for full-screen image display */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -217,20 +331,60 @@ const DetailedDestinationScreen = () => {
         </View>
       </Modal>
 
+      {/* Details section including title, description, and additional information */}
       <View style={styles.detailSection}>
-        <Text style={styles.title}>{destination.name}</Text>
+        {/* Title and audio controls container */}
+        <View style={styles.controlRow}>
+          {/* Title */}
+          <Text style={styles.title} numberOfLines={2} adjustsFontSizeToFit>
+            {destination.name}
+          </Text>
+
+          {/* Audio controls */}
+          <View style={styles.playButton}>
+            <TouchableOpacity
+              onPress={
+                isSpeaking
+                  ? stopSpeech
+                  : () => speak(composeTextToSpeak(destination), speechRate)
+              }
+              style={styles.audioButton}
+            >
+              <Icon
+                name={isSpeaking ? "stop" : "play"}
+                size={24}
+                color="#000"
+              />
+              <Text style={styles.audioControlLabel}>
+                {isSpeaking ? "Stop Audio" : "Play Audio"}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={increaseSpeechRate}
+              style={styles.speedControl}
+            >
+              <MaterialCommunityIcons
+                name="play-speed"
+                size={24}
+                color="black"
+              />
+              <Text>{speechRate.toFixed(1)}X</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Description and other details */}
         <Text style={styles.description}>{destination.description}</Text>
-        {/* Display additional fields as needed */}
         <Text style={[styles.info, styles.infoTitle]}>
           Historical significance
         </Text>
         <Text style={styles.info}>{destination.historical}</Text>
-
         <Text style={[styles.info, styles.infoTitle]}>
           Interesting information
         </Text>
         <Text style={styles.info}>{destination.info}</Text>
-        {/* Location and Nearloc fields might require additional formatting if they are not simple strings */}
+
+        {/* MapView for location display if available */}
         {destination.location && (
           <View>
             <MapView
@@ -265,9 +419,10 @@ const DetailedDestinationScreen = () => {
             </TouchableOpacity>
           </View>
         )}
+
+        {/* Nearby locations and visitor information */}
         <Text style={[styles.info, styles.infoTitle]}>Nearby</Text>
         <Text style={styles.info}>{destination.nearloc}</Text>
-
         <Text style={[styles.info, styles.infoTitle]}>
           Information For Visitors
         </Text>
@@ -293,11 +448,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#fafafa",
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#212121",
-    marginTop: 24,
-    marginBottom: 4,
+    flex: 1,
+    paddingRight: 10,
+    marginBottom: 8,
+    lineHeight: 26,
   },
   description: {
     fontSize: 18,
@@ -381,6 +538,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#dc3545", // Red color for close button
     borderRadius: 16,
   },
+  audioControlsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexShrink: 1,
+  },
   textStyle: {
     color: "white",
     fontWeight: "bold",
@@ -389,6 +551,42 @@ const styles = StyleSheet.create({
   noImageText: {
     fontStyle: "italic",
     color: "#6c757d",
+  },
+  controlRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    // justifyContent: "space-between",
+    paddingVertical: 16,
+  },
+  playButton: {
+    marginHorizontal: 8,
+    flexDirection: "row",
+  },
+  audioControlLabel: {
+    fontSize: 16,
+    color: "#212121",
+    // flexDirection: "row",
+    alignItems: "center",
+  },
+  speedControl: {
+    // flexDirection: "row",
+    alignItems: "center",
+  },
+  speedControl: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 10,
+  },
+  speechRateText: {
+    marginLeft: 4,
+    fontSize: 16,
+    color: "#212121",
+  },
+  audioButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: 10, // Adjust space between audio button and speed control
   },
 });
 
