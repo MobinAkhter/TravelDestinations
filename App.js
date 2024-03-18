@@ -45,15 +45,13 @@ const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView {...props}>
       <SafeAreaView style={styles.drawerHeader}>
-        <Image source={require("./crescent.jpeg")} style={styles.logo} />
+        <Image source={require("./crescent.png")} style={styles.logo} />
         <Text style={[styles.appName]}>Muslim Travel</Text>
       </SafeAreaView>
       <View style={styles.drawerItemsContainer}>
         <DrawerItemList {...props} />
-        {/* Additional custom drawer items here if needed */}
       </View>
       <Text style={styles.version}>Version 1.0.0</Text>
-      {/* Replace with your current app version */}
     </DrawerContentScrollView>
   );
 };
@@ -92,10 +90,10 @@ export default function App() {
       <NavigationContainer>
         <DrawerNavigator />
         {/* AdMob banner */}
-        {/* <BannerAd
+        <BannerAd
           unitId={adUnitId}
           size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        /> */}
+        />
       </NavigationContainer>
     </>
   );
@@ -132,13 +130,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   drawerItem: {
-    // ... existing styles
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 8,
   },
   drawerItemLabel: {
-    // ... existing styles
     marginLeft: 15,
   },
   version: {
@@ -147,10 +143,8 @@ const styles = StyleSheet.create({
     color: "#92929d",
     paddingBottom: 10,
   },
-  // If you've added custom icons
   iconStyle: {
     width: 24,
     height: 24,
   },
-  // ... other styles
 });

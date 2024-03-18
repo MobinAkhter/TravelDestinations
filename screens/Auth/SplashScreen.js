@@ -44,7 +44,7 @@ const SplashScreen = ({ navigation }) => {
     <View style={styles.container}>
       <LinearGradient colors={["#f2f2f2", "#d4e9e2"]} style={styles.background}>
         <Animated.Image
-          source={require("../../assets/crescent.jpeg")}
+          source={require("../../crescent.png")}
           resizeMode="contain"
           style={[
             styles.logo,

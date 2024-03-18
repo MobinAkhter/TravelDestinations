@@ -66,7 +66,7 @@ function DestinationScreen({ route }) {
     const imageUri =
       item.image && item.image.length > 0
         ? { uri: item.image[0] }
-        : require("../../logo-1.png");
+        : require("../../img.png");
 
     const numColumns = destinations.length === 1 ? 1 : 2;
     const width =

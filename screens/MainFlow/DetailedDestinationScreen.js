@@ -30,6 +30,7 @@ import * as Speech from "expo-speech";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import defaultImage from "../../img.png";
 
 const openMaps = (lat, lng, label) => {
   // Depending on the platform, the URL scheme may differ
@@ -57,15 +58,16 @@ const DetailedDestinationScreen = () => {
   const [voices, setVoices] = useState([]);
   const [isPaused, setIsPaused] = useState(false);
 
+  const getRandomVoiceIdentifier = () => {
+    const randomIndex = Math.floor(Math.random() * preferredVoices.length);
+    return preferredVoices[randomIndex].identifier; // Returns a random voice identifier
+  };
   const preferredVoices = [
-    { name: "Rishi", identifier: "com.apple.voice.compact.en-IN.Rishi" },
     { name: "Samantha", identifier: "com.apple.voice.compact.en-US.Samantha" },
     { name: "Daniel", identifier: "com.apple.voice.compact.en-GB.Daniel" },
-    { name: "Karen", identifier: "com.apple.voice.compact.en-AU.Karen" },
-    { name: "Moira", identifier: "com.apple.voice.compact.en-IE.Moira" },
   ];
   const [selectedVoice, setSelectedVoice] = useState(
-    preferredVoices[2].identifier
+    getRandomVoiceIdentifier()
   );
   const [speechRate, setSpeechRate] = useState(1.0);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -116,14 +118,15 @@ const DetailedDestinationScreen = () => {
     }
 
     const chunk = chunks.shift();
+    const randomVoice = getRandomVoiceIdentifier(); // Get a random voice identifier
     Speech.speak(chunk, {
       rate,
-      voice: selectedVoice,
+      voice: randomVoice, // Use the random voice for this chunk
       onStart: () => {
         setIsSpeaking(true);
       },
       onDone: () => {
-        speakChunks(chunks, rate);
+        speakChunks(chunks, rate); // Continue with the next chunk
       },
     });
   };
@@ -297,7 +300,8 @@ const DetailedDestinationScreen = () => {
         </Swiper>
       ) : (
         <View style={styles.slide}>
-          <Text style={styles.noImageText}>No Images Available</Text>
+          <Image style={styles.image} source={defaultImage} />
+          {/* <Text style={styles.noImageText}>No Images Available</Text> */}
         </View>
       )}
 
@@ -568,6 +572,7 @@ const styles = StyleSheet.create({
     color: "#212121",
     // flexDirection: "row",
     alignItems: "center",
+    marginLeft: 4,
   },
   speedControl: {
     // flexDirection: "row",
