@@ -55,7 +55,7 @@ const DonationScreen = () => {
         style={styles.button}
         onPress={() =>
           handleButtonPress(
-            "https://www.buymeacoffee.com/herbmateine",
+            "https://www.buymeacoffee.com/muslimtravel",
             "Buy Me A Coffee"
           )
         }

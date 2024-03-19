@@ -90,10 +90,10 @@ export default function App() {
       <NavigationContainer>
         <DrawerNavigator />
         {/* AdMob banner */}
-        <BannerAd
+        {/* <BannerAd
           unitId={adUnitId}
           size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        />
+        /> */}
       </NavigationContainer>
     </>
   );
