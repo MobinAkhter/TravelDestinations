@@ -25,6 +25,7 @@ import {
   Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Share } from "react-native";
 
 const adUnitId = __DEV__
   ? TestIds.ADAPTIVE_BANNER
@@ -32,11 +33,18 @@ const adUnitId = __DEV__
 
 const Drawer = createDrawerNavigator();
 
-const CustomDrawerItem = ({ label, navigation, targetScreen }) => (
+const CustomDrawerItem = ({ label, navigation, targetScreen, icon }) => (
   <TouchableOpacity
-    style={styles.drawerItem}
-    onPress={() => navigation.navigate(targetScreen)}
+    style={styles.drawerItemCustom}
+    onPress={() => {
+      if (typeof targetScreen === "function") {
+        targetScreen();
+      } else {
+        navigation.navigate(targetScreen);
+      }
+    }}
   >
+    {icon && <Ionicons name={icon} size={24} style={styles.drawerItemIcon} />}
     <Text style={styles.drawerItemLabel}>{label}</Text>
   </TouchableOpacity>
 );
@@ -48,12 +56,44 @@ const CustomDrawerContent = (props) => {
         <Image source={require("./crescent.png")} style={styles.logo} />
         <Text style={[styles.appName]}>Muslim Travel</Text>
       </SafeAreaView>
+
       <View style={styles.drawerItemsContainer}>
         <DrawerItemList {...props} />
+      </View>
+      <View style={styles.bottomDrawerSection}>
+        <CustomDrawerItem
+          label="Share Muslim Travel"
+          navigation={props.navigation}
+          targetScreen={onShare}
+          icon="share-social-outline" // Ionicons name for a share icon
+        />
       </View>
       <Text style={styles.version}>Version 1.0.0</Text>
     </DrawerContentScrollView>
   );
+};
+
+const onShare = async () => {
+  try {
+    const result = await Share.share({
+      message:
+        "Check out Muslim Travel app to explore Islamic heritage sites around the world! Download now and start your journey.",
+      // You can add a URL to your app in the respective app stores below
+      url: "https://bit.ly/HerbMate",
+    });
+
+    if (result.action === Share.sharedAction) {
+      if (result.activityType) {
+        // shared with activity type of result.activityType
+      } else {
+        // shared
+      }
+    } else if (result.action === Share.dismissedAction) {
+      // dismissed
+    }
+  } catch (error) {
+    alert(error.message);
+  }
 };
 
 function DrawerNavigator() {
@@ -90,10 +130,10 @@ export default function App() {
       <NavigationContainer>
         <DrawerNavigator />
         {/* AdMob banner */}
-        {/* <BannerAd
+        <BannerAd
           unitId={adUnitId}
           size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        /> */}
+        />
       </NavigationContainer>
     </>
   );
@@ -122,9 +162,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginHorizontal: 10,
   },
-  drawerItemLabel: {
-    fontSize: 16,
-  },
+
   drawerItemsContainer: {
     flex: 1,
     paddingVertical: 10,
@@ -134,9 +172,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 8,
   },
-  drawerItemLabel: {
-    marginLeft: 15,
-  },
+
   version: {
     fontSize: 14,
     textAlign: "center",
@@ -146,5 +182,25 @@ const styles = StyleSheet.create({
   iconStyle: {
     width: 24,
     height: 24,
+  },
+  bottomDrawerSection: {
+    borderTopColor: "#f4f4f4",
+    borderTopWidth: 1,
+    paddingTop: 10,
+    paddingBottom: 20, // Added bottom padding
+  },
+  drawerItemCustom: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 16, // Match the padding of DrawerItemList items
+  },
+  drawerItemIcon: {
+    marginRight: 32, // Adjust based on your visual preference
+  },
+  drawerItemLabel: {
+    fontSize: 16,
+    fontWeight: "bold", // Match the font weight of DrawerItemList items
+    color: "#92929d", // Match the inactive color of DrawerItemList items
   },
 });
