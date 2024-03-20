@@ -172,6 +172,12 @@ const DetailedDestinationScreen = () => {
     return chunks;
   }
 
+  const HeaderTitle = ({ title }) => (
+    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.headerTitle}>
+      {title}
+    </Text>
+  );
+
   useEffect(() => {
     const fetchDestinationDetails = async () => {
       setIsLoading(true);
@@ -188,7 +194,7 @@ const DetailedDestinationScreen = () => {
       try {
         const docSnap = await getDoc(destinationRef);
         if (docSnap.exists()) {
-          console.log("Fetched destination data:", docSnap.data());
+          // console.log("Fetched destination data:", docSnap.data());
           setDestination(docSnap.data());
         } else {
           console.log("No such destination found with ID:", locationId);
@@ -204,11 +210,11 @@ const DetailedDestinationScreen = () => {
   useEffect(() => {
     if (destination) {
       navigation.setOptions({
-        title: destination.name,
+        headerTitle: () => <HeaderTitle title={destination.name} />,
         headerRight: () => (
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity style={{ marginRight: 16 }} onPress={onShare}>
-              <SimpleLineIcons name="share" size={24} color="black" />
+              <SimpleLineIcons name="share" size={24} color="white" />
             </TouchableOpacity>
           </View>
         ),
@@ -592,6 +598,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginRight: 10, // Adjust space between audio button and speed control
+  },
+  headerTitle: {
+    color: "white", // Make sure the color contrasts with the header background
+    fontSize: 20, // Adjust the font size as needed
+    fontWeight: "600",
+    // Other styles you might want to apply to match your design
+    maxWidth: 250, // You may need to adjust this based on your header width
   },
 });
 
