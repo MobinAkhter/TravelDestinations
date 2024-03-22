@@ -16,9 +16,9 @@
         }
       ]
     ],
-    "version": "1.0.33",
+    "version": "1.0.36",
     "orientation": "default",
-    "icon": "./crescent.png",
+    "icon": "./3.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -37,11 +37,11 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./crescent.png",
+        "foregroundImage": "./3.png",
         "backgroundColor": "#35D96F"
       },
       "package": "com.mobinakhter123.MuslimTravelDestinations",
-      "versionCode": 33,
+      "versionCode": 36,
       "config": {
         "googleMaps" : {
           "apiKey": "AIzaSyD19WpKBykiCtowg08wmvP0d7Tn07p9XSg"

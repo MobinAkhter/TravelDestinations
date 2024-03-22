@@ -68,7 +68,7 @@ const CustomDrawerContent = (props) => {
           icon="share-social-outline" // Ionicons name for a share icon
         />
       </View>
-      <Text style={styles.version}>Version 1.0.0</Text>
+      <Text style={styles.version}>Version 1.0.1</Text>
     </DrawerContentScrollView>
   );
 };
