@@ -79,7 +79,7 @@ const onShare = async () => {
       message:
         "Check out Muslim Travel app to explore Islamic heritage sites around the world! Download now and start your journey.",
       // You can add a URL to your app in the respective app stores below
-      url: "https://bit.ly/HerbMate",
+      url: "https://play.google.com/store/apps/details?id=com.mobinakhter123.MuslimTravelDestinations&pcampaignid=web_share",
     });
 
     if (result.action === Share.sharedAction) {

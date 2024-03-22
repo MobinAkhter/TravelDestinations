@@ -55,10 +55,10 @@ const SplashScreen = ({ navigation }) => {
           ]}
         />
         <Animated.Text style={[styles.title, { opacity: fadeAnim }]}>
-          Welcome to Muslim Travel
+          Embark on a Journey
         </Animated.Text>
         <Animated.Text style={[styles.subtitle, { opacity: fadeAnim }]}>
-          Discover the making of the Muslim world
+          Unveil the Heritage of Islam with Muslim Travel
         </Animated.Text>
       </LinearGradient>
     </View>
@@ -73,29 +73,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 20,
   },
   logo: {
-    width: width * 0.8,
-    height: width * 0.8,
-    marginBottom: 20,
+    width: width * 0.6, // Reduced logo size
+    height: width * 0.6, // Keep the aspect ratio
+    marginBottom: 30, // Increased spacing between logo and text
   },
   title: {
-    fontSize: 28,
-    fontWeight: "800",
+    fontSize: 24, // Slightly reduced font size for title
+    fontWeight: "bold", // Bold font weight for title
     color: "#3A5A40",
-    marginBottom: 10,
-    textShadowColor: "rgba(0, 0, 0, 0.75)",
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
+    textShadowColor: "rgba(0, 0, 0, 0.25)", // Lighter text shadow for subtlety
+    textShadowOffset: { width: 0, height: 1 }, // Reduced shadow offset
+    textShadowRadius: 3, // Reduced shadow spread
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 16, // Subtitle font size remains the same
     color: "#3A5A40",
-    marginTop: 5,
-    fontStyle: "italic",
-    textShadowColor: "rgba(0, 0, 0, 0.75)",
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
+    fontStyle: "italic", // Maintain italic style for subtitle
+    textShadowColor: "rgba(0, 0, 0, 0.25)", // Lighter text shadow for subtlety
+    textShadowOffset: { width: 0, height: 1 }, // Reduced shadow offset
+    textShadowRadius: 3, // Reduced shadow spread
   },
 });
 
