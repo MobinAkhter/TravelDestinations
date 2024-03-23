@@ -77,9 +77,7 @@ const onShare = async () => {
   try {
     const result = await Share.share({
       message:
-        "Check out Muslim Travel app to explore Islamic heritage sites around the world! Download now and start your journey.",
-      // You can add a URL to your app in the respective app stores below
-      url: "https://play.google.com/store/apps/details?id=com.mobinakhter123.MuslimTravelDestinations&pcampaignid=web_share",
+        "Check out Muslim Travel app to explore Islamic heritage sites around the world! Download now and start your journey.\n\nhttps://play.google.com/store/apps/details?id=com.mobinakhter123.MuslimTravelDestinations&pcampaignid=web_share",
     });
 
     if (result.action === Share.sharedAction) {

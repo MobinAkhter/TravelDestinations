@@ -18,4 +18,5 @@ export const countryThemeColors = {
   Turkey: "#E30A17", // Red from the flag
   Uzbekistan: "#1EB53A", // Green from the flag
   Yemen: "#CE1126", // Red from the flag
+  Kazakhstan: "#00AFCA",
 };

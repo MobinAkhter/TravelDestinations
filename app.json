@@ -16,7 +16,7 @@
         }
       ]
     ],
-    "version": "1.0.36",
+    "version": "1.0.37",
     "orientation": "default",
     "icon": "./3.png",
     "userInterfaceStyle": "light",
@@ -41,7 +41,7 @@
         "backgroundColor": "#35D96F"
       },
       "package": "com.mobinakhter123.MuslimTravelDestinations",
-      "versionCode": 36,
+      "versionCode": 37,
       "config": {
         "googleMaps" : {
           "apiKey": "AIzaSyD19WpKBykiCtowg08wmvP0d7Tn07p9XSg"
