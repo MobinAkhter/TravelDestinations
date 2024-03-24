@@ -18,8 +18,8 @@ Experience the ease of having a comprehensive Islamic travel guide – download 
 
 ## Screenshots
 
-![Screenshot 1](https://github.com/MobinAkhter/TravelDestinations/assets/55329336/81d3c3a6-b306-4c68-ae69-5fb1fb57bc65){ width=50% }
-![Screenshot 2](https://github.com/MobinAkhter/TravelDestinations/assets/55329336/54f8308b-762a-40f3-8747-58328cb64ed4){ width=50% }
-![Screenshot 3](https://github.com/MobinAkhter/TravelDestinations/assets/55329336/91ab815a-b96a-4ea3-90c0-f3ff32279a49){ width=50% }
-![Screenshot 4](https://github.com/MobinAkhter/TravelDestinations/assets/55329336/02168b92-2243-424d-9e73-b9ac92a82915){ width=50% }
-![Screenshot 5](https://github.com/MobinAkhter/TravelDestinations/assets/55329336/9db546eb-d743-4899-b714-1d2aadf3237d){ width=50% }
+<img src="https://github.com/MobinAkhter/TravelDestinations/assets/55329336/81d3c3a6-b306-4c68-ae69-5fb1fb57bc65" width="400" />
+<img src="https://github.com/MobinAkhter/TravelDestinations/assets/55329336/54f8308b-762a-40f3-8747-58328cb64ed4" width="400" />
+<img src="https://github.com/MobinAkhter/TravelDestinations/assets/55329336/91ab815a-b96a-4ea3-90c0-f3ff32279a49" width="400" />
+<img src="https://github.com/MobinAkhter/TravelDestinations/assets/55329336/02168b92-2243-424d-9e73-b9ac92a82915" width="400" />
+<img src="https://github.com/MobinAkhter/TravelDestinations/assets/55329336/9db546eb-d743-4899-b714-1d2aadf3237d" width="400" />
