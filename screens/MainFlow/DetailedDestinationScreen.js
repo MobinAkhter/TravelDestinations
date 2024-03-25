@@ -136,12 +136,6 @@ const DetailedDestinationScreen = () => {
     setSpokenText("");
   };
 
-  const resumeSpeech = () => {
-    if (spokenText) {
-      speak(spokenText, speechRate);
-    }
-  };
-
   useEffect(() => {
     let isMounted = true;
     Speech.getAvailableVoicesAsync().then((availableVoices) => {
